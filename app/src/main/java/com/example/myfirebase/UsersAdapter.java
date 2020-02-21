@@ -16,6 +16,9 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
     Context mContect;
     List<User> mUserList;
+    private boolean isLoadingAdded = false;
+    public static final int LOADING = 1002;
+    public static final int DATA = 1003;
 
     public UsersAdapter(Context mContect, List<User> mUserList){
         this.mContect = mContect;
@@ -25,16 +28,53 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_users,parent,false);
+        View view = null;
+        RecyclerView.ViewHolder viewHolder = null;
+        switch (viewType){
+            case DATA:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_users,parent,false);
+                viewHolder = new ViewHolder(view);
+                break;
+
+            case LOADING:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_progress,parent,false);
+                viewHolder = new ViewHolder(view);
+                break;
+        }
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = mUserList.get(position);
-        holder.textView.setText(user.first_name);
-        holder.textView2.setText(user.last_name);
+        switch (holder.getItemViewType()){
+            case DATA:
+                User user = mUserList.get(position);
+                holder.tvFirstName.setText(user.first_name);
+                holder.tvLastName.setText(user.last_name);
 
+                break;
+
+            case LOADING:
+                break;
+        }
+
+    }
+
+    public void addLoadingFooter(){
+        isLoadingAdded = true;
+        mUserList.add(new User("first_name","last_name"));
+        notifyItemInserted(mUserList.size()- 1);
+    }
+
+    public void removeLoadingFooter(){
+        isLoadingAdded = false;
+        if (mUserList.size() == 0) return;
+        int position = mUserList.size() - 1;
+        User item = mUserList.get(position);
+        if (item != null){
+            mUserList.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     @Override
@@ -42,12 +82,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         return mUserList.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return (position == mUserList.size() - 1 && isLoadingAdded) ? LOADING:DATA;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView,textView2;
+        TextView tvFirstName,tvLastName;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
-            textView2 = itemView.findViewById(R.id.textView2);
+            tvFirstName = itemView.findViewById(R.id.tv_first_name);
+            tvLastName = itemView.findViewById(R.id.tv_last_name);
         }
     }
 }
