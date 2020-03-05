@@ -11,8 +11,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".logistics_app.LogisticsComActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".AndroidTelePhonyActivity"></activity>
+        <activity
+            android:name=".PhoneCallActivity"
+            android:exported="true" />
+        <activity
+            android:name=".logistics_app.LogisticsComActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +27,7 @@
         </activity>
         <activity android:name=".MainActivity" />
     </application>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 

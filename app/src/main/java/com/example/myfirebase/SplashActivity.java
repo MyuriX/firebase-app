@@ -25,14 +25,15 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
         findViewById(R.id.tv_logistics).setOnClickListener(this);
         findViewById(R.id.tv_main).setOnClickListener(this);
-        findViewById(R.id.tv_all).setOnClickListener(this);
+        findViewById(R.id.tv_phone_sms).setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.tv_all:
+            case R.id.tv_phone_sms:
+                startActivity(new Intent(SplashActivity.this,AndroidTelePhonyActivity.class));
                 break;
             case R.id.tv_main:
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
